@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestLanguageTranslationOption(unittest.TestCase):
     """LanguageTranslationOption unit test stubs"""
 

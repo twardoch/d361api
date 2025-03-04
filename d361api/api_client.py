@@ -26,7 +26,7 @@ from d361api import rest
 from d361api.api_response import ApiResponse
 from d361api.api_response import T as ApiResponseT
 from d361api.configuration import Configuration
-from d361api.exceptions import (ApiException, ApiValueError)
+from d361api.exceptions import ApiException, ApiValueError
 from dateutil.parser import parse
 from pydantic import SecretStr
 

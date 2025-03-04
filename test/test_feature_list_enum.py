@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestFeatureListEnum(unittest.TestCase):
     """FeatureListEnum unit test stubs"""
 

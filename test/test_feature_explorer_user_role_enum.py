@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestFeatureExplorerUserRoleEnum(unittest.TestCase):
     """FeatureExplorerUserRoleEnum unit test stubs"""
 

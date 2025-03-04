@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestDataSourceType(unittest.TestCase):
     """DataSourceType unit test stubs"""
 

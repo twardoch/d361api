@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestProjectProtection(unittest.TestCase):
     """ProjectProtection unit test stubs"""
 

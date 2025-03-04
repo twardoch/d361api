@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestUserAccess(unittest.TestCase):
     """UserAccess unit test stubs"""
 

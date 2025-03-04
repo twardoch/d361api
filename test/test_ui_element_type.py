@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestUIElementType(unittest.TestCase):
     """UIElementType unit test stubs"""
 

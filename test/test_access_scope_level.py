@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestAccessScopeLevel(unittest.TestCase):
     """AccessScopeLevel unit test stubs"""
 

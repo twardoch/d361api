@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestImportDocumemtationLogMessageType(unittest.TestCase):
     """ImportDocumemtationLogMessageType unit test stubs"""
 

@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestArticleStatusCustomer(unittest.TestCase):
     """ArticleStatusCustomer unit test stubs"""
 

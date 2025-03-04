@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestSectionTypeEnum(unittest.TestCase):
     """SectionTypeEnum unit test stubs"""
 

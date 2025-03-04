@@ -16,7 +16,7 @@ import http.client as httplib
 import logging
 import sys
 from logging import FileHandler
-from typing import (Any, ClassVar, Literal, NotRequired, Self, TypedDict)
+from typing import Any, ClassVar, Literal, NotRequired, Self, TypedDict
 
 import urllib3
 

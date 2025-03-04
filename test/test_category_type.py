@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestCategoryType(unittest.TestCase):
     """CategoryType unit test stubs"""
 

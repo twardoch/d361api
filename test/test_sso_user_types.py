@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestSSOUserTypes(unittest.TestCase):
     """SSOUserTypes unit test stubs"""
 

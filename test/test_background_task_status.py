@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestBackgroundTaskStatus(unittest.TestCase):
     """BackgroundTaskStatus unit test stubs"""
 

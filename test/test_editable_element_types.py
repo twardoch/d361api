@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestEditableElementTypes(unittest.TestCase):
     """EditableElementTypes unit test stubs"""
 

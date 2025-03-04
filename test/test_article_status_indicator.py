@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestArticleStatusIndicator(unittest.TestCase):
     """ArticleStatusIndicator unit test stubs"""
 

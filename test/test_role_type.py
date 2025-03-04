@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestRoleType(unittest.TestCase):
     """RoleType unit test stubs"""
 

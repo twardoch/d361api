@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestArticleType(unittest.TestCase):
     """ArticleType unit test stubs"""
 

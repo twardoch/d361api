@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestArticleStaleStatus(unittest.TestCase):
     """ArticleStaleStatus unit test stubs"""
 

@@ -14,7 +14,6 @@
 import unittest
 
 
-
 class TestProjectVersionTypeCustomer(unittest.TestCase):
     """ProjectVersionTypeCustomer unit test stubs"""
 
