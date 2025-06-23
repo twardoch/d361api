@@ -124,12 +124,11 @@ class RESTClientObject:
             'GET', 'HEAD', 'DELETE', 'POST', 'PUT', 'PATCH', 'OPTIONS'
         ]
 
-        if post_params and body is not None and not (isinstance(body, (str,bytes)) and not body): # Allow empty string/bytes body with post_params
-             # If body is not None and not an empty string/bytes, it's ambiguous with post_params
-            if not (isinstance(body, dict) and not body): # Allow empty dict for json body
-                raise ApiValueError(
-                    "body parameter cannot be used with post_params parameter unless body is empty or for JSON."
-                )
+        if post_params and body is not None and not (isinstance(body, (str,bytes)) and not body) and not (isinstance(body, dict) and not body):
+            raise ApiValueError(
+                "body parameter cannot be used with post_params parameter unless body is empty or for JSON."
+            )
+
 
         headers = headers or {}
         timeout = _request_timeout if _request_timeout is not None else self.client.timeout
