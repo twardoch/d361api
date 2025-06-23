@@ -194,7 +194,12 @@ class RESTClientObject:
             # No need to manually raise_for_status, ApiException.from_response will handle it
         except httpx.RequestError as e: # Catches network errors, timeout, etc.
             # Map httpx exceptions to ApiException or a new specific exception type if needed
-            raise ApiException(status=0, reason=f"HTTPX RequestError: {e.__class__.__name__} - {e}")
+            url = getattr(e.request, "url", None) if hasattr(e, "request") else request_args.get("url")
+            url_info = f" URL: {url}" if url else ""
+            raise ApiException(
+                status=0,
+                reason=f"HTTPX RequestError ({e.__class__.__name__}){url_info} - {e}"
+            )
 
         return RESTResponse(response)
 
