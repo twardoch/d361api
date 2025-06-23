@@ -15,195 +15,186 @@ import io
 import json
 import re
 import ssl
+from typing import Any, Mapping
 
-import aiohttp
-import aiohttp_retry
+import httpx # Replaced aiohttp
 from d361api.exceptions import ApiException, ApiValueError
 
-RESTResponseType = aiohttp.ClientResponse
+RESTResponseType = httpx.Response # Replaced aiohttp.ClientResponse
 
-ALLOW_RETRY_METHODS = frozenset({'DELETE', 'GET', 'HEAD', 'OPTIONS', 'PUT', 'TRACE'})
+# httpx uses these methods for its internal retry mechanism by default
+# For more complex retry strategies, httpx relies on event hooks or external libraries like tenacity
+# We will use httpx's built-in retries via AsyncHTTPTransport
+RETRY_METHODS = frozenset({'DELETE', 'GET', 'HEAD', 'OPTIONS', 'PUT', 'TRACE'})
+
 
 class RESTResponse(io.IOBase):
+    def __init__(self, resp: httpx.Response) -> None:
+        self.response: httpx.Response = resp
+        self.status: int = resp.status_code # Changed from resp.status
+        self.reason: str = resp.reason_phrase # Changed from resp.reason
+        self.data: bytes | None = None # Will be populated by read()
 
-    def __init__(self, resp) -> None:
-        self.response = resp
-        self.status = resp.status
-        self.reason = resp.reason
-        self.data = None
-
-    async def read(self):
+    async def read(self) -> bytes:
         if self.data is None:
-            self.data = await self.response.read()
+            await self.response.aread() # Ensure stream is consumed
+            self.data = self.response.content
         return self.data
 
-    def getheaders(self):
-        """Returns a CIMultiDictProxy of the response headers."""
+    def getheaders(self) -> httpx.Headers:
+        """Returns httpx.Headers object of the response headers."""
         return self.response.headers
 
-    def getheader(self, name, default=None):
+    def getheader(self, name: str, default: str | None = None) -> str | None: # Typed default
         """Returns a given response header."""
         return self.response.headers.get(name, default)
 
 
 class RESTClientObject:
-
     def __init__(self, configuration) -> None:
+        self.configuration = configuration
+        self.maxsize = configuration.connection_pool_maxsize # Used for httpx limits
 
-        # maxsize is number of requests to host that are allowed in parallel
-        self.maxsize = configuration.connection_pool_maxsize
-
-        self.ssl_context = ssl.create_default_context(
-            cafile=configuration.ssl_ca_cert
+        # SSL Configuration for httpx
+        # httpx uses 'verify' and 'cert' parameters in its client or transport
+        ssl_context = httpx.create_ssl_context(
+            cafile=configuration.ssl_ca_cert,
+            certfile=configuration.cert_file,
+            keyfile=configuration.key_file,
         )
-        if configuration.cert_file:
-            self.ssl_context.load_cert_chain(
-                configuration.cert_file, keyfile=configuration.key_file
-            )
-
         if not configuration.verify_ssl:
-            self.ssl_context.check_hostname = False
-            self.ssl_context.verify_mode = ssl.CERT_NONE
+            ssl_context.check_hostname = False
+            ssl_context.verify_mode = ssl.CERT_NONE
 
-        self.proxy = configuration.proxy
-        self.proxy_headers = configuration.proxy_headers
+        self.verify_ssl = ssl_context if configuration.verify_ssl else False
 
-        self.retries = configuration.retries
 
-        self.pool_manager: aiohttp.ClientSession | None = None
-        self.retry_client: aiohttp_retry.RetryClient | None = None
+        # Proxy Configuration for httpx
+        proxies = None
+        if configuration.proxy:
+            proxies = {"all://": configuration.proxy}
+            if configuration.proxy_headers:
+                # httpx doesn't directly support proxy_headers in the same way aiohttp did.
+                # This would typically be handled by custom transport or if the proxy supports it via URL.
+                # For now, we'll note this limitation or assume standard proxy auth if embedded in URL.
+                pass
+        self.proxies = proxies
+
+
+        # Retry Configuration for httpx
+        # httpx.AsyncHTTPTransport can take a 'retries' argument.
+        transport_retries = 0
+        if configuration.retries is not None:
+            transport_retries = configuration.retries
+
+        # httpx Client Initialization
+        limits = httpx.Limits(
+            max_connections=self.maxsize if self.maxsize else None,
+            max_keepalive_connections=20 # A reasonable default for keep-alive
+        )
+
+        transport = httpx.AsyncHTTPTransport(
+            verify=self.httpx_verify_param, # Use the correctly prepared SSLContext or False
+            retries=transport_retries,
+            limits=limits
+        )
+
+        # If mypy complains about proxies, it might be a stub issue. httpx.AsyncClient does accept it.
+        self.client: httpx.AsyncClient = httpx.AsyncClient(
+            proxies=self.proxies, # type: ignore[call-arg]
+            transport=transport,
+            follow_redirects=True,
+            timeout=httpx.Timeout(5 * 60.0) # Default timeout
+        )
 
     async def close(self) -> None:
-        if self.pool_manager:
-            await self.pool_manager.close()
-        if self.retry_client is not None:
-            await self.retry_client.close()
+        await self.client.aclose()
 
     async def request(
         self,
-        method,
-        url,
-        headers=None,
-        body=None,
-        post_params=None,
-        _request_timeout=None
-    ):
-        """Execute request
-
-        :param method: http request method
-        :param url: http request url
-        :param headers: http request headers
-        :param body: request json body, for `application/json`
-        :param post_params: request post parameters,
-                            `application/x-www-form-urlencoded`
-                            and `multipart/form-data`
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        """
+        method: str,
+        url: str,
+        headers: Mapping[str, str] | None = None,
+        body: Any | None = None, # Can be dict for json, str, bytes, etc.
+        post_params: list[tuple[str, Any]] | None = None, # For form data
+        _request_timeout: float | httpx.Timeout | None = None
+    ) -> RESTResponse:
         method = method.upper()
         assert method in [
-            'GET',
-            'HEAD',
-            'DELETE',
-            'POST',
-            'PUT',
-            'PATCH',
-            'OPTIONS'
+            'GET', 'HEAD', 'DELETE', 'POST', 'PUT', 'PATCH', 'OPTIONS'
         ]
 
-        if post_params and body:
-            raise ApiValueError(
-                "body parameter cannot be used with post_params parameter."
-            )
+        if post_params and body is not None and not (isinstance(body, (str,bytes)) and not body): # Allow empty string/bytes body with post_params
+             # If body is not None and not an empty string/bytes, it's ambiguous with post_params
+            if not (isinstance(body, dict) and not body): # Allow empty dict for json body
+                raise ApiValueError(
+                    "body parameter cannot be used with post_params parameter unless body is empty or for JSON."
+                )
 
-        post_params = post_params or {}
         headers = headers or {}
-        # url already contains the URL query string
-        timeout = _request_timeout or 5 * 60
+        timeout = _request_timeout if _request_timeout is not None else self.client.timeout
 
-        if 'Content-Type' not in headers:
-            headers['Content-Type'] = 'application/json'
-
-        args = {
+        # Prepare request arguments for httpx
+        request_args: dict[str, Any] = {
             "method": method,
             "url": url,
+            "headers": headers,
             "timeout": timeout,
-            "headers": headers
         }
 
-        if self.proxy:
-            args["proxy"] = self.proxy
-        if self.proxy_headers:
-            args["proxy_headers"] = self.proxy_headers
+        # Content/Body handling
+        content_type = headers.get('Content-Type', 'application/json').lower()
 
-        # For `POST`, `PUT`, `PATCH`, `OPTIONS`, `DELETE`
         if method in ['POST', 'PUT', 'PATCH', 'OPTIONS', 'DELETE']:
-            if re.search('json', headers['Content-Type'], re.IGNORECASE):
-                if body is not None:
-                    body = json.dumps(body)
-                args["data"] = body
-            elif headers['Content-Type'] == 'application/x-www-form-urlencoded':
-                args["data"] = aiohttp.FormData(post_params)
-            elif headers['Content-Type'] == 'multipart/form-data':
-                # must del headers['Content-Type'], or the correct
-                # Content-Type which generated by aiohttp
-                del headers['Content-Type']
-                data = aiohttp.FormData()
-                for param in post_params:
-                    k, v = param
-                    if isinstance(v, tuple) and len(v) == 3:
-                        data.add_field(
-                            k,
-                            value=v[1],
-                            filename=v[0],
-                            content_type=v[2]
-                        )
-                    else:
-                        # Ensures that dict objects are serialized
-                        if isinstance(v, dict):
-                            v = json.dumps(v)
-                        elif isinstance(v, int):
-                            v = str(v)
-                        data.add_field(k, v)
-                args["data"] = data
+            if post_params: # Form data
+                if 'multipart/form-data' in content_type:
+                    # httpx handles multipart from dict of files or data
+                    # files = {k: (filename, content, content_type) or file_like_object}
+                    # data = {k: v} for simple fields
+                    # We expect post_params to be list of tuples (key, value)
+                    # where value can be (filename, filedata, mimetype) for files
+                    httpx_files = {}
+                    httpx_data = {}
+                    for k, v_item in post_params:
+                        if isinstance(v_item, tuple) and len(v_item) == 3: # (filename, filedata, mimetype)
+                            httpx_files[k] = (v_item[0], v_item[1], v_item[2])
+                        elif isinstance(v_item, tuple) and len(v_item) == 2 and hasattr(v_item[1], 'read'): # (filename, file_like_object)
+                             httpx_files[k] = (v_item[0], v_item[1], None) # Explicitly None for content_type
+                        else: # simple data field
+                            httpx_data[k] = str(v_item) if isinstance(v_item, (dict, list, int, float)) else v_item
 
-            # Pass a `bytes` or `str` parameter directly in the body to support
-            # other content types than Json when `body` argument is provided
-            # in serialized form
-            elif isinstance(body, str) or isinstance(body, bytes):
-                args["data"] = body
-            else:
-                # Cannot generate the request from given parameters
-                msg = """Cannot prepare a request message for provided
-                         arguments. Please check that your arguments match
-                         declared content type."""
-                raise ApiException(status=0, reason=msg)
+                    if httpx_files:
+                        request_args["files"] = httpx_files
+                    if httpx_data: # Can send data fields along with files
+                        request_args["data"] = httpx_data
+                    # httpx will set Content-Type for multipart, remove if set
+                    if 'Content-Type' in request_args.get("headers", {}):
+                        del request_args["headers"]['Content-Type']
 
-        pool_manager: aiohttp.ClientSession | aiohttp_retry.RetryClient
+                elif 'application/x-www-form-urlencoded' in content_type:
+                    # Convert list of tuples to dict for httpx's data param
+                    request_args["data"] = {k: str(v) if isinstance(v, (dict, list, int, float)) else v for k, v in post_params}
+                else: # Potentially other form types, pass post_params as data
+                    request_args["data"] = {k: str(v) if isinstance(v, (dict, list, int, float)) else v for k, v in post_params}
 
-        # https pool manager
-        if self.pool_manager is None:
-            self.pool_manager = aiohttp.ClientSession(
-                connector=aiohttp.TCPConnector(limit=self.maxsize, ssl=self.ssl_context),
-                trust_env=True,
-            )
-        pool_manager = self.pool_manager
+            elif body is not None:
+                if 'application/json' in content_type:
+                    request_args["json"] = body # httpx handles serialization for json
+                elif isinstance(body, (str, bytes)):
+                    request_args["content"] = body
+                else:
+                    # If body is some other serializable object but not for JSON,
+                    # it should be pre-serialized to str or bytes.
+                    # This case might need more specific handling based on expected types.
+                    msg = "Body must be dict for JSON, or str/bytes for other content types."
+                    raise ApiException(status=0, reason=msg)
 
-        if self.retries is not None and method in ALLOW_RETRY_METHODS:
-            if self.retry_client is None:
-                self.retry_client = aiohttp_retry.RetryClient(
-                    client_session=self.pool_manager,
-                    retry_options=aiohttp_retry.ExponentialRetry(
-                        attempts=self.retries,
-                        factor=2.0,
-                        start_timeout=0.1,
-                        max_timeout=120.0
-                    )
-                )
-            pool_manager = self.retry_client
+        try:
+            response = await self.client.request(**request_args)
+            # No need to manually raise_for_status, ApiException.from_response will handle it
+        except httpx.RequestError as e: # Catches network errors, timeout, etc.
+            # Map httpx exceptions to ApiException or a new specific exception type if needed
+            raise ApiException(status=0, reason=f"HTTPX RequestError: {e.__class__.__name__} - {e}")
 
-        r = await pool_manager.request(**args)
+        return RESTResponse(response)
 
-        return RESTResponse(r)

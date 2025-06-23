@@ -19,6 +19,7 @@ import os
 import re
 import tempfile
 from enum import Enum
+from typing import cast # Added cast
 from urllib.parse import quote
 
 import d361api.d361api
@@ -289,10 +290,12 @@ class ApiClient:
         msg = "RESTResponse.read() must be called before passing it to response_deserialize()"
         assert response_data.data is not None, msg
 
-        response_type = response_types_map.get(str(response_data.status), None)
-        if not response_type and isinstance(response_data.status, int) and 100 <= response_data.status <= 599:
-            # if not found, look for '1XX', '2XX', etc.
-            response_type = response_types_map.get(str(response_data.status)[0] + "XX", None)
+        response_type = None
+        if response_types_map:
+            response_type = response_types_map.get(str(response_data.status), None)
+            if not response_type and isinstance(response_data.status, int) and 100 <= response_data.status <= 599:
+                # if not found, look for '1XX', '2XX', etc.
+                response_type = response_types_map.get(str(response_data.status)[0] + "XX", None)
 
         # deserialize response data
         response_text = None
@@ -320,7 +323,7 @@ class ApiClient:
 
         return ApiResponse(
             status_code = response_data.status,
-            data = return_data,
+            data = cast(ApiResponseT, return_data), # Added cast
             headers = response_data.getheaders(),
             raw_data = response_data.data
         )
@@ -379,7 +382,7 @@ class ApiClient:
             for key, val in obj_dict.items()
         }
 
-    def deserialize(self, response_text: str, response_type: str, content_type: str | None):
+    def deserialize(self, response_text: str, response_type: Any, content_type: str | None): # Changed response_type to Any
         """Deserializes response into an object.
 
         :param response: RESTResponse object to be deserialized.
@@ -411,7 +414,7 @@ class ApiClient:
 
         return self.__deserialize(data, response_type)
 
-    def __deserialize(self, data, klass):
+    def __deserialize(self, data: Any, klass: Any): # Changed klass to Any, data to Any
         """Deserializes dict, list, str into an object.
 
         :param data: dict, list or str.
