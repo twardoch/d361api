@@ -10,7 +10,8 @@
     Do not edit the class manually.
 """
 
-from typing import Any, Self
+from typing import Any
+from typing_extensions import Self
 
 
 class OpenApiException(Exception):

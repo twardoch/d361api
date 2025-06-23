@@ -16,7 +16,8 @@ import http.client as httplib
 import logging
 import sys
 from logging import FileHandler
-from typing import Any, ClassVar, Literal, NotRequired, Self, TypedDict
+from typing import Any, ClassVar, Literal, TypedDict
+from typing_extensions import NotRequired, Self
 
 import urllib3
 
@@ -113,7 +114,7 @@ class AuthSettings(TypedDict, total=False):
 class HostSettingVariable(TypedDict):
     description: str
     default_value: str
-    enum_values: list[str]
+    enum_values: NotRequired[list[str]] # Made enum_values NotRequired
 
 
 class HostSetting(TypedDict):
