@@ -69,15 +69,7 @@ class RESTClientObject:
         self.verify_ssl = ssl_context if configuration.verify_ssl else False
 
 
-        # Proxy Configuration for httpx
-        proxies = None
-        if configuration.proxy:
-            proxies = {"all://": configuration.proxy}
-            if configuration.proxy_headers:
-                # httpx doesn't directly support proxy_headers in the same way aiohttp did.
-                # This would typically be handled by custom transport or if the proxy supports it via URL.
-                # For now, we'll note this limitation or assume standard proxy auth if embedded in URL.
-                pass
+        proxies = {"all://": configuration.proxy} if configuration.proxy else None
         self.proxies = proxies
 
 
