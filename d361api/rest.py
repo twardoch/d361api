@@ -89,7 +89,7 @@ class RESTClientObject:
 
         # httpx Client Initialization
         limits = httpx.Limits(
-            max_connections=self.maxsize if self.maxsize else None,
+            max_connections=self.maxsize or None,
             max_keepalive_connections=20 # A reasonable default for keep-alive
         )
 
