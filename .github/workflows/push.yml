@@ -44,12 +44,14 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.10", "3.11", "3.12"]
-        os: [ubuntu-latest]
-      fail-fast: true
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -67,10 +69,10 @@ jobs:
       - name: Install test dependencies
         run: |
           uv pip install --system --upgrade pip
-          uv pip install --system ".[test]"
+          uv pip install --system -e ".[test]"
 
       - name: Run tests with Pytest
-        run: uv run pytest -n auto --maxfail=1 --disable-warnings --cov-report=xml --cov-config=pyproject.toml --cov=src/d361api --cov=tests tests/
+        run: uv run pytest -n auto --maxfail=1 --disable-warnings --cov-report=xml --cov-config=pyproject.toml --cov=d361api --cov=test test/
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
@@ -85,6 +87,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -99,7 +103,7 @@ jobs:
           enable-cache: true
 
       - name: Install build tools
-        run: uv pip install build hatchling hatch-vcs
+        run: uv pip install --system build hatchling hatch-vcs
 
       - name: Build distributions
         run: uv run python -m build --outdir dist
