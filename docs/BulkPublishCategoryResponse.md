@@ -6,11 +6,11 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **data** | [**List[BulkCategoryResult]**](BulkCategoryResult.md) |  | [optional] 
-**extension_data** | **object** | Extention data for customer API response | [optional] 
-**success** | **bool** | Status indication for customer API response | [optional] 
-**errors** | [**List[BaseError]**](BaseError.md) | Errors in the customer API response | [optional] 
-**warnings** | [**List[BaseWarning]**](BaseWarning.md) | Warnings in the customer API response | [optional] 
-**information** | [**List[BaseInformation]**](BaseInformation.md) | Information passed by the customer API response | [optional] 
+**extension_data** | **object** | Extension data for customer API response | [optional] 
+**success** | **bool** | Indicates the status of the API response. A value of true signifies that the request was successfully processed, while false indicates a failure or error occurred. | [optional] 
+**errors** | [**List[BaseError]**](BaseError.md) | A list of errors encountered during the API request. Each error object provides details about the problem, including an error code and a message explaining the issue. This field is populated when the request fails or encounters issues. | [optional] 
+**warnings** | [**List[BaseWarning]**](BaseWarning.md) | A list of warnings generated during the API request. These are non-critical issues or recommendations that might affect the request but won&#39;t stop it from processing. Each warning object provides a message to inform the user of potential problems. | [optional] 
+**information** | [**List[BaseInformation]**](BaseInformation.md) | Contains additional non-critical information relevant to the request or response. This field provides extra details that might assist in understanding the context of the API response but is not essential for processing. | [optional] 
 
 ## Example
 

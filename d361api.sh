@@ -2,6 +2,7 @@
 PKG=d361api
 URL=https://apihub.document360.io/swagger/v2/swagger.json
 VER="1.0.0"
+rm -rf $PKG
 
 openapi-generator-cli generate \
     --api-package $PKG \

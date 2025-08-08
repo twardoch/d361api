@@ -10,6 +10,8 @@ Name | Type | Description | Notes
 **category_access_info** | [**CategoryAccessInfo**](CategoryAccessInfo.md) |  | [optional] 
 **article_access_info** | [**ArticleAccessInfo**](ArticleAccessInfo.md) |  | [optional] 
 **access_scope_level** | [**AccessScopeLevel**](AccessScopeLevel.md) | This is an enum. Possible values are 0 - None, 1 - Category, 2 - Version, 3 - Project, 4 - Lanaguage | [optional] 
+**guide_access_info** | [**GuideAccessInfo**](GuideAccessInfo.md) |  | [optional] 
+**guide_category_access_info** | [**CategoryAccessInfo**](CategoryAccessInfo.md) |  | [optional] 
 **role_name** | **str** |  | [optional] 
 **role_id** | **str** |  | [optional] 
 **group_name** | **str** |  | [optional] 

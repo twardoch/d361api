@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**extension_data** | **object** | Extention data for customer Api response information | [optional] 
-**description** | **str** | status description for customer Api response information | [optional] 
+**extension_data** | **object** | Extension data for customer Api response information | [optional] 
+**description** | **str** | A plain message offering helpful context about the response, such as confirmation of fallback logic or skipped operations. | [optional] 
 
 ## Example
 

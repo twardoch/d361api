@@ -26,6 +26,7 @@ Name | Type | Description | Notes
 **is_fall_back_content** | **bool** | Indicates whether the category page content is a fallback of the default language content or not | [optional] 
 **stale_status** | [**StaleStatus**](StaleStatus.md) | Fresh - Category page is up-to-date  Stale -  Category page requires review | [optional] 
 **content_type** | **str** | 0 - Markdown  1 - WYSIWYG(HTML)  2 - Advanced WYSIWYG | [optional] 
+**current_workflow_status_id** | **str** | Current Workflow status of the article | [optional] 
 **is_block_editor** | **bool** |  | [optional] [readonly] 
 
 ## Example

@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**v2_articles_article_id_delete**](ArticlesApi.md#v2_articles_article_id_delete) | **DELETE** /v2/Articles/{articleId} | Deletes an article with an ID
 [**v2_articles_article_id_fork_put**](ArticlesApi.md#v2_articles_article_id_fork_put) | **PUT** /v2/Articles/{articleId}/fork | Forks an article with an id
 [**v2_articles_article_id_lang_code_get**](ArticlesApi.md#v2_articles_article_id_lang_code_get) | **GET** /v2/Articles/{articleId}/{langCode} | Gets an article
+[**v2_articles_article_id_lang_code_publish_delete**](ArticlesApi.md#v2_articles_article_id_lang_code_publish_delete) | **DELETE** /v2/Articles/{articleId}/{langCode}/publish | Unpublishes an article with an id
 [**v2_articles_article_id_lang_code_publish_post**](ArticlesApi.md#v2_articles_article_id_lang_code_publish_post) | **POST** /v2/Articles/{articleId}/{langCode}/publish | Publishes an article with an id
 [**v2_articles_article_id_lang_code_put**](ArticlesApi.md#v2_articles_article_id_lang_code_put) | **PUT** /v2/Articles/{articleId}/{langCode} | Updates an article with the ID
 [**v2_articles_article_id_lang_code_settings_get**](ArticlesApi.md#v2_articles_article_id_lang_code_settings_get) | **GET** /v2/Articles/{articleId}/{langCode}/settings | Gets settings for the article
@@ -25,9 +26,11 @@ Method | HTTP request | Description
 [**v2_articles_bulkcreate_post**](ArticlesApi.md#v2_articles_bulkcreate_post) | **POST** /v2/Articles/bulkcreate | Adds multiple articles
 [**v2_articles_bulkdelete_article_versions_delete**](ArticlesApi.md#v2_articles_bulkdelete_article_versions_delete) | **DELETE** /v2/Articles/bulkdelete-article-versions | Delete multiple article versions
 [**v2_articles_bulkdelete_delete**](ArticlesApi.md#v2_articles_bulkdelete_delete) | **DELETE** /v2/Articles/bulkdelete | Deletes multiple articles
+[**v2_articles_bulkpublish_lang_code_delete**](ArticlesApi.md#v2_articles_bulkpublish_lang_code_delete) | **DELETE** /v2/Articles/bulkpublish/{langCode} | Unpublishes multiple articles
 [**v2_articles_bulkpublish_lang_code_post**](ArticlesApi.md#v2_articles_bulkpublish_lang_code_post) | **POST** /v2/Articles/bulkpublish/{langCode} | Publishes multiple articles
 [**v2_articles_bulkupdate_put**](ArticlesApi.md#v2_articles_bulkupdate_put) | **PUT** /v2/Articles/bulkupdate | Updates multiple articles
 [**v2_articles_post**](ArticlesApi.md#v2_articles_post) | **POST** /v2/Articles | Adds an article to an existing category
+[**v2_articles_update_workflow_post**](ArticlesApi.md#v2_articles_update_workflow_post) | **POST** /v2/Articles/update-workflow | Update workflow status of the articles
 
 
 # **v2_articles_article_id_delete**
@@ -264,6 +267,89 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Success |  -  |
+**400** | Bad Request |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **v2_articles_article_id_lang_code_publish_delete**
+> CreateArticleResponse v2_articles_article_id_lang_code_publish_delete(article_id, lang_code, unpublish_article_request=unpublish_article_request)
+
+Unpublishes an article with an id
+
+### Example
+
+* Api Key Authentication (api_token):
+
+```python
+import d361api
+from d361api.models.create_article_response import CreateArticleResponse
+from d361api.models.unpublish_article_request import UnpublishArticleRequest
+from d361api.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://apihub.document360.io
+# See configuration.py for a list of all supported configuration parameters.
+configuration = d361api.Configuration(
+    host = "https://apihub.document360.io"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure API key authorization: api_token
+configuration.api_key['api_token'] = os.environ["API_KEY"]
+
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# configuration.api_key_prefix['api_token'] = 'Bearer'
+
+# Enter a context with an instance of the API client
+async with d361api.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = d361api.ArticlesApi(api_client)
+    article_id = 'article_id_example' # str | The ID of the article
+    lang_code = 'en' # str | Language code of the article (default to 'en')
+    unpublish_article_request = {"user_id":"f11efc6f-e968-4e95-82eb-85ad61559de8","project_version_id":"46f48bc7-760f-4b07-b2d2-fce4aa8ba234","version_number":1,"unpublish_message":"Unpublishing my article."} # UnpublishArticleRequest |  (optional)
+
+    try:
+        # Unpublishes an article with an id
+        api_response = await api_instance.v2_articles_article_id_lang_code_publish_delete(article_id, lang_code, unpublish_article_request=unpublish_article_request)
+        print("The response of ArticlesApi->v2_articles_article_id_lang_code_publish_delete:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling ArticlesApi->v2_articles_article_id_lang_code_publish_delete: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **article_id** | **str**| The ID of the article | 
+ **lang_code** | **str**| Language code of the article | [default to &#39;en&#39;]
+ **unpublish_article_request** | [**UnpublishArticleRequest**](UnpublishArticleRequest.md)|  | [optional] 
+
+### Return type
+
+[**CreateArticleResponse**](CreateArticleResponse.md)
+
+### Authorization
+
+[api_token](../README.md#api_token)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: application/json
 
 ### HTTP response details
@@ -1735,6 +1821,87 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **v2_articles_bulkpublish_lang_code_delete**
+> BulkUnpublishArticleResponse v2_articles_bulkpublish_lang_code_delete(lang_code, bulk_unpublish_article_request=bulk_unpublish_article_request)
+
+Unpublishes multiple articles
+
+### Example
+
+* Api Key Authentication (api_token):
+
+```python
+import d361api
+from d361api.models.bulk_unpublish_article_request import BulkUnpublishArticleRequest
+from d361api.models.bulk_unpublish_article_response import BulkUnpublishArticleResponse
+from d361api.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://apihub.document360.io
+# See configuration.py for a list of all supported configuration parameters.
+configuration = d361api.Configuration(
+    host = "https://apihub.document360.io"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure API key authorization: api_token
+configuration.api_key['api_token'] = os.environ["API_KEY"]
+
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# configuration.api_key_prefix['api_token'] = 'Bearer'
+
+# Enter a context with an instance of the API client
+async with d361api.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = d361api.ArticlesApi(api_client)
+    lang_code = 'en' # str | Language code of the article (default to 'en')
+    bulk_unpublish_article_request = {"articles":[{"article_id":"8bcd4bf9-eb93-40d9-a8df-c3b518660ceb","version_number":1},{"article_id":"2ce2607f-6cfa-4bc9-9e47-1dc3843198629","version_number":1}],"user_id":"f11efc6f-e968-4e95-82eb-85ad61559de8","project_version_id":"46f48bc7-760f-4b07-b2d2-fce4aa8ba234","unpublish_message":"multiple article unpublished"} # BulkUnpublishArticleRequest |  (optional)
+
+    try:
+        # Unpublishes multiple articles
+        api_response = await api_instance.v2_articles_bulkpublish_lang_code_delete(lang_code, bulk_unpublish_article_request=bulk_unpublish_article_request)
+        print("The response of ArticlesApi->v2_articles_bulkpublish_lang_code_delete:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling ArticlesApi->v2_articles_bulkpublish_lang_code_delete: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **lang_code** | **str**| Language code of the article | [default to &#39;en&#39;]
+ **bulk_unpublish_article_request** | [**BulkUnpublishArticleRequest**](BulkUnpublishArticleRequest.md)|  | [optional] 
+
+### Return type
+
+[**BulkUnpublishArticleResponse**](BulkUnpublishArticleResponse.md)
+
+### Authorization
+
+[api_token](../README.md#api_token)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Success |  -  |
+**400** | Bad Request |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **v2_articles_bulkpublish_lang_code_post**
 > CreateArticleResponse v2_articles_bulkpublish_lang_code_post(lang_code, bulk_publish_article=bulk_publish_article)
 
@@ -1955,6 +2122,85 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**CreateArticleResponse**](CreateArticleResponse.md)
+
+### Authorization
+
+[api_token](../README.md#api_token)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Success |  -  |
+**400** | Bad Request |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **v2_articles_update_workflow_post**
+> CustomerApiBaseResponse v2_articles_update_workflow_post(article_update_workflow_request=article_update_workflow_request)
+
+Update workflow status of the articles
+
+### Example
+
+* Api Key Authentication (api_token):
+
+```python
+import d361api
+from d361api.models.article_update_workflow_request import ArticleUpdateWorkflowRequest
+from d361api.models.customer_api_base_response import CustomerApiBaseResponse
+from d361api.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://apihub.document360.io
+# See configuration.py for a list of all supported configuration parameters.
+configuration = d361api.Configuration(
+    host = "https://apihub.document360.io"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure API key authorization: api_token
+configuration.api_key['api_token'] = os.environ["API_KEY"]
+
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# configuration.api_key_prefix['api_token'] = 'Bearer'
+
+# Enter a context with an instance of the API client
+async with d361api.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = d361api.ArticlesApi(api_client)
+    article_update_workflow_request = {"project_version_id":"ae430990-88df-4886-b1e6-2596ae416df7","lang_code":"en","user_id":"43340990-88df-4886-b1e6-2596ae416df7","article_ids":["ea35f84c-394b-407c-80e9-4187a7ea9620","49fe8b58-2e21-4251-b10d-cec4c5a8769f"],"workflow_status_info":{"status_id":"65545e06-8c41-4e1a-a090-c603f9f1b4b2","due_date":"2024-06-13T14:30:00","comment":"Ready for review","assignee_id":"eed92685-0c5e-46b4-b559-c27625fe7a6b"}} # ArticleUpdateWorkflowRequest |  (optional)
+
+    try:
+        # Update workflow status of the articles
+        api_response = await api_instance.v2_articles_update_workflow_post(article_update_workflow_request=article_update_workflow_request)
+        print("The response of ArticlesApi->v2_articles_update_workflow_post:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling ArticlesApi->v2_articles_update_workflow_post: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **article_update_workflow_request** | [**ArticleUpdateWorkflowRequest**](ArticleUpdateWorkflowRequest.md)|  | [optional] 
+
+### Return type
+
+[**CustomerApiBaseResponse**](CustomerApiBaseResponse.md)
 
 ### Authorization
 

@@ -21,6 +21,9 @@ Name | Type | Description | Notes
 **external_source_link** | **str** |  | [optional] 
 **external_source_name** | **str** |  | [optional] 
 **external_source_id** | **str** |  | [optional] 
+**is_attachment** | **bool** |  | [optional] 
+**attachment_url** | **str** |  | [optional] 
+**attachment_title** | **str** |  | [optional] 
 
 ## Example
 

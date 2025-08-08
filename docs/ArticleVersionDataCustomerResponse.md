@@ -30,6 +30,7 @@ Name | Type | Description | Notes
 **is_shared_article** | **bool** | &#x60;True&#x60; indicates that the article is shared | [optional] 
 **translation_option** | [**LanguageTranslationOption**](LanguageTranslationOption.md) | The Translation status of the article | [optional] 
 **url** | **str** | Url of the article | [optional] 
+**current_workflow_status_id** | **str** | Current Workflow status of the article | [optional] 
 
 ## Example
 

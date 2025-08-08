@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**extension_data** | **object** | Extention Data for customer Api warning | [optional] 
-**description** | **str** | Warning description | [optional] 
-**warning_code** | **str** | warning code for customer Api base response | [optional] 
+**extension_data** | **object** | Extension Data for customer Api warning | [optional] 
+**description** | **str** | A plain message that describes the warning and helps understand what should be reviewed. | [optional] 
+**warning_code** | **str** | A short, predefined code that uniquely identifies the warning type. | [optional] 
 
 ## Example
 

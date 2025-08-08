@@ -19,6 +19,7 @@ Name | Type | Description | Notes
 **translation_option** | [**LanguageTranslationOption**](LanguageTranslationOption.md) | The Translation status of the article | [optional] 
 **is_shared_article** | **bool** | &#x60;True&#x60; indicates that the article is shared | [optional] 
 **modified_at** | **datetime** | Article modified date time | [optional] 
+**current_workflow_status_id** | **str** | Current Workflow status of the article | [optional] 
 
 ## Example
 

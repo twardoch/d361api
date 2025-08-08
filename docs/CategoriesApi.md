@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**v2_categories_bulkcreate_post**](CategoriesApi.md#v2_categories_bulkcreate_post) | **POST** /v2/Categories/bulkcreate | Adds multiple Categories
 [**v2_categories_bulkdelete_category_versions_delete**](CategoriesApi.md#v2_categories_bulkdelete_category_versions_delete) | **DELETE** /v2/Categories/bulkdelete-category-versions | Delete multiple category versions
+[**v2_categories_bulkpublish_lang_code_delete**](CategoriesApi.md#v2_categories_bulkpublish_lang_code_delete) | **DELETE** /v2/Categories/bulkpublish/{langCode} | Unpublishes multiple categories
 [**v2_categories_bulkpublish_lang_code_post**](CategoriesApi.md#v2_categories_bulkpublish_lang_code_post) | **POST** /v2/Categories/bulkpublish/{langCode} | Publishes multiple categories
 [**v2_categories_bulkupdate_content_put**](CategoriesApi.md#v2_categories_bulkupdate_content_put) | **PUT** /v2/Categories/bulkupdateContent | Update multiple page categories
 [**v2_categories_category_id_content_lang_code_get**](CategoriesApi.md#v2_categories_category_id_content_lang_code_get) | **GET** /v2/Categories/{categoryId}/content/{langCode} | Get category page with an ID
@@ -13,6 +14,7 @@ Method | HTTP request | Description
 [**v2_categories_category_id_delete**](CategoriesApi.md#v2_categories_category_id_delete) | **DELETE** /v2/Categories/{categoryId} | Deletes an category with an ID
 [**v2_categories_category_id_fork_put**](CategoriesApi.md#v2_categories_category_id_fork_put) | **PUT** /v2/Categories/{categoryId}/fork | Fork category page with an id
 [**v2_categories_category_id_get**](CategoriesApi.md#v2_categories_category_id_get) | **GET** /v2/Categories/{categoryId} | Get category with an ID
+[**v2_categories_category_id_lang_code_publish_delete**](CategoriesApi.md#v2_categories_category_id_lang_code_publish_delete) | **DELETE** /v2/Categories/{categoryId}/{langCode}/publish | Unpublishes a page category with an id
 [**v2_categories_category_id_lang_code_publish_post**](CategoriesApi.md#v2_categories_category_id_lang_code_publish_post) | **POST** /v2/Categories/{categoryId}/{langCode}/publish | Publishes an category with an id
 [**v2_categories_category_id_lang_code_settings_get**](CategoriesApi.md#v2_categories_category_id_lang_code_settings_get) | **GET** /v2/Categories/{categoryId}/{langCode}/settings | Get settings for the Category
 [**v2_categories_category_id_lang_code_settings_put**](CategoriesApi.md#v2_categories_category_id_lang_code_settings_put) | **PUT** /v2/Categories/{categoryId}/{langCode}/settings | Update settings for the category
@@ -30,6 +32,7 @@ Method | HTTP request | Description
 [**v2_categories_category_id_versions_lang_code_version_number_get**](CategoriesApi.md#v2_categories_category_id_versions_lang_code_version_number_get) | **GET** /v2/Categories/{categoryId}/versions/{langCode}/{versionNumber} | Get category page content with an ID
 [**v2_categories_category_id_versions_version_number_get**](CategoriesApi.md#v2_categories_category_id_versions_version_number_get) | **GET** /v2/Categories/{categoryId}/versions/{versionNumber} | Get category page content with an ID
 [**v2_categories_post**](CategoriesApi.md#v2_categories_post) | **POST** /v2/Categories | Adds a new category
+[**v2_categories_update_workflow_post**](CategoriesApi.md#v2_categories_update_workflow_post) | **POST** /v2/Categories/update-workflow | Update workflow status of the page categories
 
 
 # **v2_categories_bulkcreate_post**
@@ -189,6 +192,87 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **v2_categories_bulkpublish_lang_code_delete**
+> BulkUnpublishCategoryResponse v2_categories_bulkpublish_lang_code_delete(lang_code, bulk_unpublish_category_request=bulk_unpublish_category_request)
+
+Unpublishes multiple categories
+
+### Example
+
+* Api Key Authentication (api_token):
+
+```python
+import d361api
+from d361api.models.bulk_unpublish_category_request import BulkUnpublishCategoryRequest
+from d361api.models.bulk_unpublish_category_response import BulkUnpublishCategoryResponse
+from d361api.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://apihub.document360.io
+# See configuration.py for a list of all supported configuration parameters.
+configuration = d361api.Configuration(
+    host = "https://apihub.document360.io"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure API key authorization: api_token
+configuration.api_key['api_token'] = os.environ["API_KEY"]
+
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# configuration.api_key_prefix['api_token'] = 'Bearer'
+
+# Enter a context with an instance of the API client
+async with d361api.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = d361api.CategoriesApi(api_client)
+    lang_code = 'en' # str | Language code of the category (default to 'en')
+    bulk_unpublish_category_request = {"categories":[{"category_id":"152e9239-1a5a-4044-b5de-1030f49976b6s","version_number":1},{"category_id":"gr32e9239-1a5a-4044-b5de-1030f499fe6sr","version_number":1}],"user_id":"f11efc6f-e968-4e95-82eb-85ad61559de8","project_version_id":"46f48bc7-760f-4b07-b2d2-fce4aa8ba234","unpublish_message":"Unpublish category"} # BulkUnpublishCategoryRequest |  (optional)
+
+    try:
+        # Unpublishes multiple categories
+        api_response = await api_instance.v2_categories_bulkpublish_lang_code_delete(lang_code, bulk_unpublish_category_request=bulk_unpublish_category_request)
+        print("The response of CategoriesApi->v2_categories_bulkpublish_lang_code_delete:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling CategoriesApi->v2_categories_bulkpublish_lang_code_delete: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **lang_code** | **str**| Language code of the category | [default to &#39;en&#39;]
+ **bulk_unpublish_category_request** | [**BulkUnpublishCategoryRequest**](BulkUnpublishCategoryRequest.md)|  | [optional] 
+
+### Return type
+
+[**BulkUnpublishCategoryResponse**](BulkUnpublishCategoryResponse.md)
+
+### Authorization
+
+[api_token](../README.md#api_token)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Success |  -  |
+**400** | Bad Request |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -749,6 +833,89 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Success |  -  |
+**400** | Bad Request |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **v2_categories_category_id_lang_code_publish_delete**
+> BulkCreateCategoryResponse v2_categories_category_id_lang_code_publish_delete(category_id, lang_code, unpublish_category_request=unpublish_category_request)
+
+Unpublishes a page category with an id
+
+### Example
+
+* Api Key Authentication (api_token):
+
+```python
+import d361api
+from d361api.models.bulk_create_category_response import BulkCreateCategoryResponse
+from d361api.models.unpublish_category_request import UnpublishCategoryRequest
+from d361api.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://apihub.document360.io
+# See configuration.py for a list of all supported configuration parameters.
+configuration = d361api.Configuration(
+    host = "https://apihub.document360.io"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure API key authorization: api_token
+configuration.api_key['api_token'] = os.environ["API_KEY"]
+
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# configuration.api_key_prefix['api_token'] = 'Bearer'
+
+# Enter a context with an instance of the API client
+async with d361api.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = d361api.CategoriesApi(api_client)
+    category_id = 'category_id_example' # str | The ID of the category
+    lang_code = 'en' # str | Language code of the category (default to 'en')
+    unpublish_category_request = {"user_id":"f11efc6f-e968-4e95-82eb-85ad61559de8","project_version_id":"46f48bc7-760f-4b07-b2d2-fce4aa8ba234","version_number":1,"unpublish_message":"Successfully unpublished"} # UnpublishCategoryRequest |  (optional)
+
+    try:
+        # Unpublishes a page category with an id
+        api_response = await api_instance.v2_categories_category_id_lang_code_publish_delete(category_id, lang_code, unpublish_category_request=unpublish_category_request)
+        print("The response of CategoriesApi->v2_categories_category_id_lang_code_publish_delete:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling CategoriesApi->v2_categories_category_id_lang_code_publish_delete: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **category_id** | **str**| The ID of the category | 
+ **lang_code** | **str**| Language code of the category | [default to &#39;en&#39;]
+ **unpublish_category_request** | [**UnpublishCategoryRequest**](UnpublishCategoryRequest.md)|  | [optional] 
+
+### Return type
+
+[**BulkCreateCategoryResponse**](BulkCreateCategoryResponse.md)
+
+### Authorization
+
+[api_token](../README.md#api_token)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: application/json
 
 ### HTTP response details
@@ -2121,6 +2288,85 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**AddCategoryResponse**](AddCategoryResponse.md)
+
+### Authorization
+
+[api_token](../README.md#api_token)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Success |  -  |
+**400** | Bad Request |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **v2_categories_update_workflow_post**
+> CustomerApiBaseResponse v2_categories_update_workflow_post(update_category_workflow_status_request=update_category_workflow_status_request)
+
+Update workflow status of the page categories
+
+### Example
+
+* Api Key Authentication (api_token):
+
+```python
+import d361api
+from d361api.models.customer_api_base_response import CustomerApiBaseResponse
+from d361api.models.update_category_workflow_status_request import UpdateCategoryWorkflowStatusRequest
+from d361api.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://apihub.document360.io
+# See configuration.py for a list of all supported configuration parameters.
+configuration = d361api.Configuration(
+    host = "https://apihub.document360.io"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure API key authorization: api_token
+configuration.api_key['api_token'] = os.environ["API_KEY"]
+
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# configuration.api_key_prefix['api_token'] = 'Bearer'
+
+# Enter a context with an instance of the API client
+async with d361api.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = d361api.CategoriesApi(api_client)
+    update_category_workflow_status_request = {"project_version_id":"ae430990-88df-4886-b1e6-2596ae416df7","lang_code":"en","user_id":"43340990-88df-4886-b1e6-2596ae416df7","category_ids":["ea35f84c-394b-407c-80e9-4187a7ea9620","49fe8b58-2e21-4251-b10d-cec4c5a8769f"],"workflow_status_info":{"status_id":"65545e06-8c41-4e1a-a090-c603f9f1b4b2","due_date":"2024-06-13T14:30:00","comment":"Ready for review","assignee_id":"eed92685-0c5e-46b4-b559-c27625fe7a6b"}} # UpdateCategoryWorkflowStatusRequest |  (optional)
+
+    try:
+        # Update workflow status of the page categories
+        api_response = await api_instance.v2_categories_update_workflow_post(update_category_workflow_status_request=update_category_workflow_status_request)
+        print("The response of CategoriesApi->v2_categories_update_workflow_post:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling CategoriesApi->v2_categories_update_workflow_post: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **update_category_workflow_status_request** | [**UpdateCategoryWorkflowStatusRequest**](UpdateCategoryWorkflowStatusRequest.md)|  | [optional] 
+
+### Return type
+
+[**CustomerApiBaseResponse**](CustomerApiBaseResponse.md)
 
 ### Authorization
 

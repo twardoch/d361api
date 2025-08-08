@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**v2_project_import_import_id_get**](ProjectApi.md#v2_project_import_import_id_get) | **GET** /v2/Project/Import/{importId} | Get the status of import
 [**v2_project_import_post**](ProjectApi.md#v2_project_import_post) | **POST** /v2/Project/Import | Import documentation
 [**v2_project_schemes_get**](ProjectApi.md#v2_project_schemes_get) | **GET** /v2/Project/Schemes | Get all the schemes for the project
+[**v2_project_workflow_statuses_get**](ProjectApi.md#v2_project_workflow_statuses_get) | **GET** /v2/Project/workflow-statuses | Gets all workflow statuses for a project
 
 
 # **v2_project_export_export_id_get**
@@ -128,7 +129,7 @@ configuration.api_key['api_token'] = os.environ["API_KEY"]
 async with d361api.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = d361api.ProjectApi(api_client)
-    export_documentation_request = {"entity":"Project","version_id":[],"selected_languages":null,"selected_categories":null,"exclude_media_files":true,"filter_by_article_modified_at":null} # ExportDocumentationRequest | Filter to export Full/Part of the documenation (optional)
+    export_documentation_request = {"entity":"Project","version_id":[],"selected_languages":null,"selected_categories":null,"exclude_media_files":true,"filter_by_article_modified_at":null,"export_type":0} # ExportDocumentationRequest | Filter to export Full/Part of the documenation (optional)
 
     try:
         # Start a new export
@@ -384,6 +385,80 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**SSOSchemeReponse**](SSOSchemeReponse.md)
+
+### Authorization
+
+[api_token](../README.md#api_token)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Success |  -  |
+**400** | Bad Request |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **v2_project_workflow_statuses_get**
+> GetWorkflowStatusResponse v2_project_workflow_statuses_get()
+
+Gets all workflow statuses for a project
+
+### Example
+
+* Api Key Authentication (api_token):
+
+```python
+import d361api
+from d361api.models.get_workflow_status_response import GetWorkflowStatusResponse
+from d361api.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://apihub.document360.io
+# See configuration.py for a list of all supported configuration parameters.
+configuration = d361api.Configuration(
+    host = "https://apihub.document360.io"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure API key authorization: api_token
+configuration.api_key['api_token'] = os.environ["API_KEY"]
+
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# configuration.api_key_prefix['api_token'] = 'Bearer'
+
+# Enter a context with an instance of the API client
+async with d361api.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = d361api.ProjectApi(api_client)
+
+    try:
+        # Gets all workflow statuses for a project
+        api_response = await api_instance.v2_project_workflow_statuses_get()
+        print("The response of ProjectApi->v2_project_workflow_statuses_get:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling ProjectApi->v2_project_workflow_statuses_get: %s\n" % e)
+```
+
+
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**GetWorkflowStatusResponse**](GetWorkflowStatusResponse.md)
 
 ### Authorization
 

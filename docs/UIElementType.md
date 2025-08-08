@@ -79,6 +79,24 @@
 
 * `NUMBER_38` (value: `38`)
 
+* `NUMBER_100` (value: `100`)
+
+* `NUMBER_101` (value: `101`)
+
+* `NUMBER_102` (value: `102`)
+
+* `NUMBER_103` (value: `103`)
+
+* `NUMBER_104` (value: `104`)
+
+* `NUMBER_105` (value: `105`)
+
+* `NUMBER_106` (value: `106`)
+
+* `NUMBER_107` (value: `107`)
+
+* `NUMBER_108` (value: `108`)
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
 

@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **unique_user_name** | **str** |  | [optional] 
 **sso_user_type** | [**SSOUserTypes**](SSOUserTypes.md) | SSO user type 0 - Normal user, 1 - SSO user, 2 - Invited SSO user | [optional] 
 **is_sso_user** | **bool** |  | [optional] 
+**is_active** | **bool** |  | [optional] 
 
 ## Example
 

@@ -22,6 +22,7 @@ Name | Type | Description | Notes
 **modified_at** | **datetime** | Category modified date time | [optional] 
 **status** | [**ArticleStatusCustomer**](ArticleStatusCustomer.md) | The status of the page type category: 0 - Draft, 3 - Published | [optional] 
 **content_type** | [**ArticleContentType**](ArticleContentType.md) | The content type of the page type category: Markdown &#x3D; 0, Wysiwyg &#x3D; 1, Block &#x3D; 2 | [optional] 
+**current_workflow_status_id** | **str** | Current Workflow status of the article | [optional] 
 
 ## Example
 

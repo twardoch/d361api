@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **selected_categories** | [**List[CategoryMeta]**](CategoryMeta.md) |  | [optional] 
 **exclude_media_files** | **bool** |  | [optional] 
 **filter_by_article_modified_at** | [**DateRange**](DateRange.md) |  | [optional] 
+**export_type** | [**ExportType**](ExportType.md) |  | [optional] 
 
 ## Example
 

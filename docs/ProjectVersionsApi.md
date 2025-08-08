@@ -4,6 +4,7 @@ All URIs are relative to *https://apihub.document360.io*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**v2_project_versions_ask_ai_feedback_post**](ProjectVersionsApi.md#v2_project_versions_ask_ai_feedback_post) | **POST** /v2/ProjectVersions/ask-ai-feedback | Provide feedback for AI assistive search
 [**v2_project_versions_ask_eddy_post**](ProjectVersionsApi.md#v2_project_versions_ask_eddy_post) | **POST** /v2/ProjectVersions/ask-eddy | Perform AI assistive search within project version
 [**v2_project_versions_get**](ProjectVersionsApi.md#v2_project_versions_get) | **GET** /v2/ProjectVersions | Gets list of project versions
 [**v2_project_versions_project_version_id_apireferences_get**](ProjectVersionsApi.md#v2_project_versions_project_version_id_apireferences_get) | **GET** /v2/ProjectVersions/{projectVersionId}/apireferences | Gets list of api reference within project version
@@ -11,6 +12,85 @@ Method | HTTP request | Description
 [**v2_project_versions_project_version_id_categories_get**](ProjectVersionsApi.md#v2_project_versions_project_version_id_categories_get) | **GET** /v2/ProjectVersions/{projectVersionId}/categories | Gets list of categories within project version
 [**v2_project_versions_project_version_id_lang_code_get**](ProjectVersionsApi.md#v2_project_versions_project_version_id_lang_code_get) | **GET** /v2/ProjectVersions/{projectVersionId}/{langCode} | Searches for a phrase inside project version
 
+
+# **v2_project_versions_ask_ai_feedback_post**
+> BaseResponse v2_project_versions_ask_ai_feedback_post(public_apiai_feedback_request=public_apiai_feedback_request)
+
+Provide feedback for AI assistive search
+
+### Example
+
+* Api Key Authentication (api_token):
+
+```python
+import d361api
+from d361api.models.base_response import BaseResponse
+from d361api.models.public_apiai_feedback_request import PublicAPIAIFeedbackRequest
+from d361api.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://apihub.document360.io
+# See configuration.py for a list of all supported configuration parameters.
+configuration = d361api.Configuration(
+    host = "https://apihub.document360.io"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure API key authorization: api_token
+configuration.api_key['api_token'] = os.environ["API_KEY"]
+
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# configuration.api_key_prefix['api_token'] = 'Bearer'
+
+# Enter a context with an instance of the API client
+async with d361api.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = d361api.ProjectVersionsApi(api_client)
+    public_apiai_feedback_request = {"entity_id":"","is_liked":false,"comments":"","notify_me_about_changes":false,"feedback_provider_email":"","additional_feedback_info":{"need_more_information":false,"difficult_to_understand":false,"irrelevant_content":false,"incorrect_source_reference":false,"missing_information":false,"dont_like_style":false,"others":false,"comments":false},"feedback_sub_type":0} # PublicAPIAIFeedbackRequest |  (optional)
+
+    try:
+        # Provide feedback for AI assistive search
+        api_response = await api_instance.v2_project_versions_ask_ai_feedback_post(public_apiai_feedback_request=public_apiai_feedback_request)
+        print("The response of ProjectVersionsApi->v2_project_versions_ask_ai_feedback_post:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling ProjectVersionsApi->v2_project_versions_ask_ai_feedback_post: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **public_apiai_feedback_request** | [**PublicAPIAIFeedbackRequest**](PublicAPIAIFeedbackRequest.md)|  | [optional] 
+
+### Return type
+
+[**BaseResponse**](BaseResponse.md)
+
+### Authorization
+
+[api_token](../README.md#api_token)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Success |  -  |
+**400** | Bad Request |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **v2_project_versions_ask_eddy_post**
 > AIAssistiveSearch v2_project_versions_ask_eddy_post(ai_assistive_search_request=ai_assistive_search_request)
