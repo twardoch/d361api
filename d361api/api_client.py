@@ -29,7 +29,6 @@ from pydantic import SecretStr
 
 from d361api.configuration import Configuration
 from d361api.api_response import ApiResponse, T as ApiResponseT
-import d361api.d361api
 from d361api import rest
 from d361api.exceptions import (
     ApiValueError,
@@ -453,6 +452,8 @@ class ApiClient:
             if klass in self.NATIVE_TYPES_MAPPING:
                 klass = self.NATIVE_TYPES_MAPPING[klass]
             else:
+                # Lazy import to avoid circular dependency
+                import d361api.d361api
                 klass = getattr(d361api.d361api, klass)
 
         if klass in self.PRIMITIVE_TYPES:
