@@ -2,7 +2,8 @@
 """Test basic model functionality."""
 
 import pytest
-from d361api.d361api import (
+
+from d361api import (
     ArticleStatusCustomer,
     CategoryType,
     LanguageMeta,
@@ -54,17 +55,14 @@ class TestBasicModels:
         # This test is generic and should work with most models
         try:
             # Try to create with some basic data
-            model_data = {
-                'id': 'test-id',
-                'name': 'test-name',
-                'description': 'test-description'
-            }
-            
+            model_data = {"id": "test-id", "name": "test-name", "description": "test-description"}
+
             # Test with any available model
             from d361api.d361api import BaseInformation
+
             base_info = BaseInformation()
             assert base_info is not None
-            
+
         except Exception as e:
             pytest.skip(f"Model creation with data failed: {e}")
 
@@ -72,17 +70,18 @@ class TestBasicModels:
         """Test basic model serialization."""
         try:
             from d361api.d361api import BaseInformation
+
             base_info = BaseInformation()
-            
+
             # Test to_dict method if available
-            if hasattr(base_info, 'to_dict'):
+            if hasattr(base_info, "to_dict"):
                 result = base_info.to_dict()
                 assert isinstance(result, dict)
-            
+
             # Test to_json method if available
-            if hasattr(base_info, 'to_json'):
+            if hasattr(base_info, "to_json"):
                 result = base_info.to_json()
                 assert isinstance(result, str)
-                
+
         except Exception as e:
             pytest.skip(f"Model serialization test failed: {e}")

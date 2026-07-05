@@ -7,16 +7,19 @@ in d361api.d361api.update_category_response.
 
 try:
     from d361api.d361api.update_category_response import UpdateCategoryResponse
-    __all__ = ['UpdateCategoryResponse']
+
+    __all__ = ["UpdateCategoryResponse"]
 except ImportError:
     # If direct import fails, try to get it from main d361api module
     try:
         import d361api
-        UpdateCategoryResponse = getattr(d361api, 'UpdateCategoryResponse', None)
+
+        UpdateCategoryResponse = getattr(d361api, "UpdateCategoryResponse", None)
         if UpdateCategoryResponse is None:
-            raise ImportError(f"Could not find UpdateCategoryResponse in d361api module")
-        __all__ = ['UpdateCategoryResponse']
+            raise ImportError("Could not find UpdateCategoryResponse in d361api module")
+        __all__ = ["UpdateCategoryResponse"]
     except (ImportError, AttributeError) as e:
         import warnings
+
         warnings.warn(f"Failed to import UpdateCategoryResponse: {e}", ImportWarning)
         __all__ = []

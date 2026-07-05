@@ -1,8 +1,7 @@
 # this_file: test/test_configuration.py
 """Test configuration functionality."""
 
-import pytest
-from d361api import Configuration
+from d361api import ApiClient, Configuration
 
 
 class TestConfiguration:
@@ -26,14 +25,14 @@ class TestConfiguration:
     def test_configuration_api_key_management(self):
         """Test API key management."""
         config = Configuration()
-        
+
         # Test setting API key
-        config.api_key['api_token'] = 'test-key'
-        assert config.api_key['api_token'] == 'test-key'
-        
+        config.api_key["api_token"] = "test-key"
+        assert config.api_key["api_token"] == "test-key"
+
         # Test API key prefix
-        config.api_key_prefix['api_token'] = 'Bearer'
-        assert config.api_key_prefix['api_token'] == 'Bearer'
+        config.api_key_prefix["api_token"] = "Bearer"
+        assert config.api_key_prefix["api_token"] == "Bearer"
 
     def test_configuration_ssl_verification(self):
         """Test SSL verification settings."""
@@ -42,27 +41,29 @@ class TestConfiguration:
         assert config.ssl_ca_cert is None
 
     def test_configuration_timeout(self):
-        """Test timeout configuration."""
+        """Timeout is a per-request argument, not a Configuration field."""
         config = Configuration()
-        # Default timeout should be set
-        assert hasattr(config, 'timeout')
+        # This generated client passes _request_timeout to individual API
+        # methods rather than storing a global timeout on Configuration.
+        assert not hasattr(config, "timeout")
 
     def test_configuration_user_agent(self):
-        """Test user agent configuration."""
-        config = Configuration()
-        assert hasattr(config, 'user_agent')
-        assert 'd361api' in config.user_agent.lower()
+        """User-Agent is managed by the ApiClient, not Configuration."""
+        client = ApiClient(configuration=Configuration())
+        assert client.user_agent  # non-empty default
+        client.user_agent = "d361api/test"
+        assert client.user_agent == "d361api/test"
 
     def test_configuration_proxy(self):
         """Test proxy configuration."""
         config = Configuration()
-        assert hasattr(config, 'proxy')
+        assert hasattr(config, "proxy")
         assert config.proxy is None
 
     def test_configuration_auth_settings(self):
         """Test authentication settings."""
         config = Configuration()
-        config.username = 'test-user'
-        config.password = 'test-pass'
-        assert config.username == 'test-user'
-        assert config.password == 'test-pass'
+        config.username = "test-user"
+        config.password = "test-pass"
+        assert config.username == "test-user"
+        assert config.password == "test-pass"

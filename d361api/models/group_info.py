@@ -7,16 +7,19 @@ in d361api.d361api.group_info.
 
 try:
     from d361api.d361api.group_info import GroupInfo
-    __all__ = ['GroupInfo']
+
+    __all__ = ["GroupInfo"]
 except ImportError:
     # If direct import fails, try to get it from main d361api module
     try:
         import d361api
-        GroupInfo = getattr(d361api, 'GroupInfo', None)
+
+        GroupInfo = getattr(d361api, "GroupInfo", None)
         if GroupInfo is None:
-            raise ImportError(f"Could not find GroupInfo in d361api module")
-        __all__ = ['GroupInfo']
+            raise ImportError("Could not find GroupInfo in d361api module")
+        __all__ = ["GroupInfo"]
     except (ImportError, AttributeError) as e:
         import warnings
+
         warnings.warn(f"Failed to import GroupInfo: {e}", ImportWarning)
         __all__ = []

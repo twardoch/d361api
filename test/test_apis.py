@@ -1,8 +1,10 @@
 # this_file: test/test_apis.py
 """Test API classes."""
 
+from unittest.mock import Mock
+
 import pytest
-from unittest.mock import Mock, AsyncMock
+
 from d361api import ApiClient, Configuration
 from d361api.d361api import (
     ArticlesApi,
@@ -49,19 +51,19 @@ class TestApiClasses:
     def test_api_methods_exist(self):
         """Test that API classes have expected methods."""
         articles_api = ArticlesApi(self.api_client)
-        
+
         # Check that common methods exist
         expected_methods = [
             # Most APIs should have some form of GET method
             # We'll check for method existence without calling them
         ]
-        
+
         # Get all methods of the API
-        methods = [method for method in dir(articles_api) if not method.startswith('_')]
-        
+        methods = [method for method in dir(articles_api) if not method.startswith("_")]
+
         # At least some methods should exist
         assert len(methods) > 0, "API should have at least some methods"
-        
+
         # Check that methods are callable
         for method_name in methods:
             method = getattr(articles_api, method_name)
@@ -79,7 +81,7 @@ class TestApiClasses:
         # Create a mock API client
         mock_client = Mock()
         mock_client.configuration = self.config
-        
+
         # Create API instance with mock client
         api = ArticlesApi(mock_client)
         assert api.api_client == mock_client
@@ -88,6 +90,6 @@ class TestApiClasses:
         """Test creating multiple API instances."""
         articles_api = ArticlesApi(self.api_client)
         categories_api = CategoriesApi(self.api_client)
-        
+
         assert articles_api != categories_api
         assert articles_api.api_client == categories_api.api_client

@@ -2,7 +2,7 @@
 """Test API client functionality."""
 
 import pytest
-from unittest.mock import Mock, patch
+
 from d361api import ApiClient, Configuration
 from d361api.exceptions import ApiException
 
@@ -30,8 +30,8 @@ class TestApiClient:
     def test_configuration_api_key_setting(self):
         """Test that API key can be set in configuration."""
         config = Configuration()
-        config.api_key['api_token'] = 'test-api-key'
-        assert config.api_key['api_token'] == 'test-api-key'
+        config.api_key["api_token"] = "test-api-key"
+        assert config.api_key["api_token"] == "test-api-key"
 
     def test_configuration_with_custom_host(self):
         """Test that custom host can be set."""

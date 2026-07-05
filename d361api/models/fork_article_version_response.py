@@ -7,16 +7,19 @@ in d361api.d361api.fork_article_version_response.
 
 try:
     from d361api.d361api.fork_article_version_response import ForkArticleVersionResponse
-    __all__ = ['ForkArticleVersionResponse']
+
+    __all__ = ["ForkArticleVersionResponse"]
 except ImportError:
     # If direct import fails, try to get it from main d361api module
     try:
         import d361api
-        ForkArticleVersionResponse = getattr(d361api, 'ForkArticleVersionResponse', None)
+
+        ForkArticleVersionResponse = getattr(d361api, "ForkArticleVersionResponse", None)
         if ForkArticleVersionResponse is None:
-            raise ImportError(f"Could not find ForkArticleVersionResponse in d361api module")
-        __all__ = ['ForkArticleVersionResponse']
+            raise ImportError("Could not find ForkArticleVersionResponse in d361api module")
+        __all__ = ["ForkArticleVersionResponse"]
     except (ImportError, AttributeError) as e:
         import warnings
+
         warnings.warn(f"Failed to import ForkArticleVersionResponse: {e}", ImportWarning)
         __all__ = []

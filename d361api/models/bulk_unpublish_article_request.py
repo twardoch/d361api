@@ -7,16 +7,19 @@ in d361api.d361api.bulk_unpublish_article_request.
 
 try:
     from d361api.d361api.bulk_unpublish_article_request import BulkUnpublishArticleRequest
-    __all__ = ['BulkUnpublishArticleRequest']
+
+    __all__ = ["BulkUnpublishArticleRequest"]
 except ImportError:
     # If direct import fails, try to get it from main d361api module
     try:
         import d361api
-        BulkUnpublishArticleRequest = getattr(d361api, 'BulkUnpublishArticleRequest', None)
+
+        BulkUnpublishArticleRequest = getattr(d361api, "BulkUnpublishArticleRequest", None)
         if BulkUnpublishArticleRequest is None:
-            raise ImportError(f"Could not find BulkUnpublishArticleRequest in d361api module")
-        __all__ = ['BulkUnpublishArticleRequest']
+            raise ImportError("Could not find BulkUnpublishArticleRequest in d361api module")
+        __all__ = ["BulkUnpublishArticleRequest"]
     except (ImportError, AttributeError) as e:
         import warnings
+
         warnings.warn(f"Failed to import BulkUnpublishArticleRequest: {e}", ImportWarning)
         __all__ = []
