@@ -71,3 +71,5 @@ d361api/_version.py
 .ruff_cache/
 .mypy_cache/
 llms.txt
+.specstory/
+*.pyc
