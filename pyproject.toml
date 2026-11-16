@@ -183,3 +183,5 @@ exclude_lines = [
     "class .*\\bProtocol\\):",
     "@(abc\\.)?abstractmethod",
 ]
+[tool.hatch.build.hooks.vcs]
+version-file = "d361api/__version__.py"
